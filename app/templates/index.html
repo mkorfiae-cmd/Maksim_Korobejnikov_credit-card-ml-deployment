@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Credit Card Default Prediction</title>
+</head>
+<body>
+    <h1>Прогноз дефолта по кредитной карте</h1>
+
+    <form method="post" action="/gui">
+        <h3>Версия модели</h3>
+
+        <select name="model_version">
+            <option value="v1">model_v1 — LogisticRegression</option>
+            <option value="v2">model_v2 — RandomForestClassifier</option>
+        </select>
+
+        <h3>Данные клиента</h3>
+
+        <label>LIMIT_BAL</label>
+        <input name="LIMIT_BAL" type="number" value="20000"><br>
+        <label>SEX</label>
+        <select name="SEX">
+            <option value="1">1 — male</option>
+            <option value="2" selected>2 — female</option>
+        </select><br>
+        <label>EDUCATION</label>
+        <select name="EDUCATION">
+            <option value="1">1 — graduate school</option>
+            <option value="2" selected>2 — university</option>
+            <option value="3">3 — high school</option>
+            <option value="4">4 — others</option>
+        </select><br>
+        <label>MARRIAGE</label>
+        <select name="MARRIAGE">
+            <option value="1" selected>1 — married</option>
+            <option value="2">2 — single</option>
+            <option value="3">3 — others</option>
+        </select><br>
+        <label>AGE</label>
+        <input name="AGE" type="number" value="24"><br>
+
+        <h3>Статус платежей</h3>
+        {% for field, selected_value in {
+            "PAY_0": 2,
+            "PAY_2": 2,
+            "PAY_3": 1,
+            "PAY_4": 0,
+            "PAY_5": 0,
+            "PAY_6": 0
+        }.items() %}
+            <label>{{ field }}</label>
+            <select name="{{ field }}">
+                {% for value in [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8] %}
+                    <option value="{{ value }}" {% if value == selected_value %}selected{% endif %}>
+                        {{ value }}
+                    </option>
+                {% endfor %}
+            </select><br>
+        {% endfor %}
+
+        <h3>Суммы счетов</h3>
+        <label>BILL_AMT1</label>
+        <input name="BILL_AMT1" type="number" value="3913"><br>
+        <label>BILL_AMT2</label>
+        <input name="BILL_AMT2" type="number" value="3102"><br>
+        <label>BILL_AMT3</label>
+        <input name="BILL_AMT3" type="number" value="689"><br>
+        <label>BILL_AMT4</label>
+        <input name="BILL_AMT4" type="number" value="0"><br>
+        <label>BILL_AMT5</label>
+        <input name="BILL_AMT5" type="number" value="0"><br>
+        <label>BILL_AMT6</label>
+        <input name="BILL_AMT6" type="number" value="0"><br>
+        <h3>Суммы платежей</h3>
+
+        <label>PAY_AMT1</label>
+        <input name="PAY_AMT1" type="number" value="0"><br>
+        <label>PAY_AMT2</label>
+        <input name="PAY_AMT2" type="number" value="689"><br>
+        <label>PAY_AMT3</label>
+        <input name="PAY_AMT3" type="number" value="0"><br>
+        <label>PAY_AMT4</label>
+        <input name="PAY_AMT4" type="number" value="0"><br>
+        <label>PAY_AMT5</label>
+        <input name="PAY_AMT5" type="number" value="0"><br>
+        <label>PAY_AMT6</label>
+        <input name="PAY_AMT6" type="number" value="0"><br>
+        <br>
+        <button type="submit">Получить прогноз</button>
+    </form>
+
+    {% if result %}
+        <hr>
+        <h2>Результат</h2>
+
+        <p><b>Модель:</b> {{ result.model_version }}</p>
+
+        <p><b>Предсказание:</b>
+            {% if result.prediction == 1 %}
+                Дефолт
+            {% else %}
+                Нет дефолта
+            {% endif %}
+        </p>
+
+        <p><b>Вероятность дефолта:</b> {{ result.probability }}</p>
+    {% endif %}
+
+    {% if error %}
+        <hr>
+        <h2>Ошибка</h2>
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

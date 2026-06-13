@@ -1,0 +1,19 @@
+
+services:
+  credit-card-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+
+    container_name: credit-card-api
+
+    ports:
+      - "5000:5000"
+
+    restart: unless-stopped
+
+    volumes:
+      - ./logs:/app/logs
+
+    environment:
+      - PYTHONUNBUFFERED=1
