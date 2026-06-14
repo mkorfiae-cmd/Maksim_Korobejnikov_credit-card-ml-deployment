@@ -27,20 +27,23 @@
 credit-card-ml-deployment/
 │
 ├── app/
+│   ├── __init__.py
 │   ├── api.py
 │   ├── model_handler.py
-│   ├── __init__.py
 │   └── templates/
 │       └── index.html
 │
 ├── data/
 │   ├── raw/
+│   │   └── UCI_Credit_Card.csv
 │   └── processed/
+│       └── credit_card_processed.csv
 │
 ├── docker/
 │   └── Dockerfile
 │
 ├── logs/
+│   └── api_logs.jsonl
 │
 ├── models/
 │   ├── model_v1.joblib
@@ -53,6 +56,7 @@ credit-card-ml-deployment/
 │   └── train_model.py
 │
 ├── tests/
+│   ├── __init__.py
 │   └── test_api.py
 │
 ├── requirements.txt
